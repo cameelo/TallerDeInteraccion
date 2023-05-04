@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ImageCollection : MonoBehaviour
+public class ImageCollection : Singleton
 {
     private string[] images;
     private string[] masks;

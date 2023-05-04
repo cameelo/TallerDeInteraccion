@@ -13,13 +13,14 @@ namespace OpenAI
         [SerializeField] private Button button;
         [SerializeField] private Image image;
         [SerializeField] private TMPro.TMP_Dropdown dropdown;
-        [SerializeField] private ImageCollection imageCollection;
+        private ImageCollection imageCollection;
         [SerializeField] private GameObject loadingLabel;
 
         private OpenAIApi openai = new OpenAIApi();
 
         private IEnumerator Start()
         {
+            imageCollection = GameObject.FindObjectOfType<ImageCollection>();
             yield return new WaitUntil(() => imageCollection.getIsInitialized());
             button.onClick.AddListener(SendImageRequest);
         }
@@ -31,8 +32,8 @@ namespace OpenAI
             inputField.enabled = false;
             loadingLabel.SetActive(true);
 
-            string selectedImage = imageCollection.getImage(dropdown.value);
-            string selectedMask = imageCollection.getMask(dropdown.value);
+            string selectedImage = imageCollection.getImage(dropdown.value - 1);
+            string selectedMask = imageCollection.getMask(dropdown.value - 1);
 
 
             var response = await openai.CreateImageEdit(new CreateImageEditRequest
