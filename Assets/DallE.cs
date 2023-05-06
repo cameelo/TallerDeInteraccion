@@ -27,10 +27,13 @@ namespace OpenAI
 
         private async void SendImageRequest()
         {
-            image.sprite = null;
-            button.enabled = false;
-            inputField.enabled = false;
+            //image.sprite = null;
+            // button.enabled = false;
+            // inputField.enabled = false;
             loadingLabel.SetActive(true);
+            button.gameObject.SetActive(false);
+            inputField.gameObject.SetActive(false);
+            image.gameObject.GetComponent<AnimateImage>().StartAnimation();
 
             string selectedImage = imageCollection.getImage(dropdown.value - 1);
             string selectedMask = imageCollection.getMask(dropdown.value - 1);
