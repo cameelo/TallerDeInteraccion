@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Threading;
 using System.Collections.Generic;
+using TMPro;
 
 namespace OpenAI
 {
@@ -11,8 +13,10 @@ namespace OpenAI
     {
         [SerializeField] private InputField inputField;
         [SerializeField] private Button button;
+        [SerializeField] private Button proceedButton;
         [SerializeField] private Image image;
-        [SerializeField] private TMPro.TMP_Dropdown dropdown;
+        [SerializeField] private TMP_Dropdown dropdown;
+        [SerializeField] private TMP_Text headerText;
         private ImageCollection imageCollection;
         [SerializeField] private GameObject loadingLabel;
 
@@ -23,6 +27,8 @@ namespace OpenAI
             imageCollection = GameObject.FindObjectOfType<ImageCollection>();
             yield return new WaitUntil(() => imageCollection.getIsInitialized());
             button.onClick.AddListener(SendImageRequest);
+            headerText.text = "Describe a este patrimonio...";
+            proceedButton.gameObject.SetActive(false);
         }
 
         private async void SendImageRequest()
@@ -33,6 +39,7 @@ namespace OpenAI
             loadingLabel.SetActive(true);
             button.gameObject.SetActive(false);
             inputField.gameObject.SetActive(false);
+            headerText.SetText("Reconstruyendo patrimonio");
             image.gameObject.GetComponent<AnimateImage>().StartAnimation();
 
             string selectedImage = imageCollection.getImage(dropdown.value - 1);
@@ -49,7 +56,7 @@ namespace OpenAI
 
             if (response.Data != null && response.Data.Count > 0)
             {
-                using(var request = new UnityWebRequest(response.Data[0].Url))
+                using (var request = new UnityWebRequest(response.Data[0].Url))
                 {
                     request.downloadHandler = new DownloadHandlerBuffer();
                     request.SetRequestHeader("Access-Control-Allow-Origin", "*");
@@ -68,9 +75,11 @@ namespace OpenAI
                 Debug.LogWarning("No image was created from this prompt.");
             }
 
-            button.enabled = true;
-            inputField.enabled = true;
-            loadingLabel.SetActive(false);
+            //button.enabled = true;
+            //inputField.enabled = true;
+            //loadingLabel.SetActive(false);
+            headerText.SetText("Patrimonio reconstruido");
+            proceedButton.gameObject.SetActive(true);
         }
     }
 }

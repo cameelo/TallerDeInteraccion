@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DallEPrompt.unity
     guid: 19d26df44532bf247b6ae0c1344ed72a
+  - enabled: 1
+    path: Assets/Scenes/FinalMessage.unity
+    guid: 4e1904cecce875243aaa7113f8a3b903
   m_configObjects: {}

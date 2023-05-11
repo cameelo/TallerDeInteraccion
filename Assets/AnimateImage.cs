@@ -31,6 +31,6 @@ public class AnimateImage : MonoBehaviour
     public void StartAnimation()
     {
         isAnimating = true;
-        targetPosition = transform.position + new Vector3(225, 0, 0);
+        targetPosition = new Vector3(Screen.width/2, Screen.height/2, 0);
     }
 }
