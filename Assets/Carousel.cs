@@ -25,7 +25,8 @@ public class Carousel : MonoBehaviour
         Debug.Log(width);
         endPosition = new Vector3(-width / 2 - separation, Screen.height/2, 0);
         Debug.Log(endPosition);
-        startPosition = new Vector3(width * (carouselSize - 1) + separation * (carouselSize - 1) + (width / 2), Screen.height / 2, 0);
+        //startPosition = new Vector3(width * (carouselSize - 1) + separation * (carouselSize - 1) + (width / 2), Screen.height / 2, 0);
+        startPosition = new Vector3(Screen.width + width/2, Screen.height / 2, 0);
         Debug.Log(startPosition);
     }
 
