@@ -68,6 +68,9 @@ namespace OpenAI
                     texture.LoadImage(request.downloadHandler.data);
                     var sprite = Sprite.Create(texture, new Rect(0, 0, 256, 256), Vector2.zero, 1f);
                     image.sprite = sprite;
+
+                    //Save generated image to file
+                    imageCollection.addAndSaveImage(request.downloadHandler.data);
                 }
             }
             else

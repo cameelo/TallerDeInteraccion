@@ -6,15 +6,18 @@ using UnityEngine.UI;
 public class Carousel : MonoBehaviour
 {
     private int carouselSize;
-    private int separation;
     private GameObject[] imageObjs;
     private Vector3 endPosition;
     private Vector3 startPosition;
+    private ImageCollection imageCollection;
+    private int recontructedIndex;
 
-    void Start()
+    IEnumerator Start()
     {
+        imageCollection = GameObject.FindObjectOfType<ImageCollection>();
+        yield return new WaitUntil(() => imageCollection.getIsInitialized());
+
         carouselSize = 5;
-        separation = 50;
         imageObjs = new GameObject[carouselSize];
         for (int i = 0; i < carouselSize; i++)
         {
@@ -22,26 +25,42 @@ public class Carousel : MonoBehaviour
             imageObjs[i] = child;
         }
         float width = imageObjs[0].GetComponent<RectTransform>().rect.width;
-        Debug.Log(width);
-        endPosition = new Vector3(-width / 2 - separation, Screen.height/2, 0);
-        Debug.Log(endPosition);
-        //startPosition = new Vector3(width * (carouselSize - 1) + separation * (carouselSize - 1) + (width / 2), Screen.height / 2, 0);
-        startPosition = new Vector3(Screen.width + width/2, Screen.height / 2, 0);
-        Debug.Log(startPosition);
+        
+        //TODO: startPostion and endPosition are hardcoded for a resolution of 1920x1080. To get this to work on different resolutions we need to figure out the transform between the editor and world space.
+        endPosition = new Vector3(-250, Screen.height/2, 0);
+        startPosition = new Vector3(Screen.width + 580, Screen.height / 2, 0);
+
+        //Set carousel initial images
+        recontructedIndex = 0;
+        foreach (GameObject imageObj in imageObjs)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(imageCollection.getFileBytes(ref recontructedIndex));
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 256, 256), Vector2.zero, 1f);
+            Image image = imageObj.GetComponent<Image>();
+            image.sprite = sprite;
+            //No sería necesiario borrar la textura allocada con new?
+        }
     }
 
     void Update()
     {
         float step = 100 * Time.deltaTime;
-        foreach (GameObject image in imageObjs)
+        foreach (GameObject imageObj in imageObjs)
         {
-            if(Mathf.Round(image.transform.position.x) == endPosition.x)
+            if(Mathf.Round(imageObj.transform.position.x) == endPosition.x)
             {
-                image.transform.position = startPosition;
+                imageObj.transform.position = startPosition;
+
+                Texture2D texture = new Texture2D(2, 2);
+                texture.LoadImage(imageCollection.getFileBytes(ref recontructedIndex));
+                var sprite = Sprite.Create(texture, new Rect(0, 0, 256, 256), Vector2.zero, 1f);
+                Image image = imageObj.GetComponent<Image>();
+                image.sprite = sprite;
             }
             else
             {
-                image.transform.position = Vector3.MoveTowards(image.transform.position, endPosition, step);
+                imageObj.transform.position = Vector3.MoveTowards(imageObj.transform.position, endPosition, step);
             }
             
         }
