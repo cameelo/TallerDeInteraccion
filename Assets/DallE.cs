@@ -33,14 +33,12 @@ namespace OpenAI
 
         private async void SendImageRequest()
         {
-            //image.sprite = null;
-            // button.enabled = false;
-            // inputField.enabled = false;
             loadingLabel.SetActive(true);
             button.gameObject.SetActive(false);
             inputField.gameObject.SetActive(false);
             headerText.SetText("Reconstruyendo patrimonio");
             image.gameObject.GetComponent<AnimateImage>().StartAnimation();
+            image.gameObject.GetComponent<Pixelation>().StopPixelating();
 
             string selectedImage = imageCollection.getImage(dropdown.value - 1);
             string selectedMask = imageCollection.getMask(dropdown.value - 1);
@@ -69,6 +67,7 @@ namespace OpenAI
                     var sprite = Sprite.Create(texture, new Rect(0, 0, 256, 256), Vector2.zero, 1f);
                     image.sprite = sprite;
 
+                    image.gameObject.GetComponent<Pixelation>().StartDepixelating();
                     //Save generated image to file
                     imageCollection.addAndSaveImage(request.downloadHandler.data);
                 }

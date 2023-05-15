@@ -6,12 +6,13 @@ public class AnimateImage : MonoBehaviour
 {
     private bool isAnimating = false;
     [SerializeField] public float animationSpeed;
+
     private Vector3 targetPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-
+ 
     }
 
     // Update is called once per frame
