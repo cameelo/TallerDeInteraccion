@@ -3,8 +3,10 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Collections;
+using System.IO;
 using System.Threading;
 using System.Collections.Generic;
+using System;
 using TMPro;
 
 namespace OpenAI
@@ -19,6 +21,8 @@ namespace OpenAI
         [SerializeField] private TMP_Text headerText;
         private ImageCollection imageCollection;
         [SerializeField] private GameObject loadingLabel;
+        [SerializeField] private bool useDropdown;
+        private int collectionIndex = 0;
 
         private OpenAIApi openai = new OpenAIApi();
 
@@ -29,19 +33,44 @@ namespace OpenAI
             button.onClick.AddListener(SendImageRequest);
             headerText.text = "Describe a este patrimonio...";
             proceedButton.gameObject.SetActive(false);
+            if (!useDropdown)
+            {
+                dropdown.gameObject.SetActive(false);
+                int collectionSize = imageCollection.getSize();
+                System.Random rnd = new System.Random();
+                collectionIndex = rnd.Next(collectionSize);
+
+                Texture2D selectedImage = new Texture2D(2, 2);
+                byte[] imageBytes = File.ReadAllBytes(imageCollection.getImage(collectionIndex));
+                selectedImage.LoadImage(imageBytes);
+                var sprite = Sprite.Create(selectedImage, new Rect(0, 0, selectedImage.width, selectedImage.height), Vector2.zero, 1f);
+                image.sprite = sprite;
+            }
+            
         }
 
         private async void SendImageRequest()
         {
-            loadingLabel.SetActive(true);
+            //loadingLabel.SetActive(true);
             button.gameObject.SetActive(false);
             inputField.gameObject.SetActive(false);
             headerText.SetText("Reconstruyendo patrimonio");
             image.gameObject.GetComponent<AnimateImage>().StartAnimation();
             image.gameObject.GetComponent<Pixelation>().StopPixelating();
 
-            string selectedImage = imageCollection.getImage(dropdown.value - 1);
-            string selectedMask = imageCollection.getMask(dropdown.value - 1);
+            string selectedImage;
+            string selectedMask;
+            if (useDropdown)
+            {
+                selectedImage = imageCollection.getImage(dropdown.value - 1);
+                selectedMask = imageCollection.getMask(dropdown.value - 1);
+            }
+            else
+            {
+                selectedImage = imageCollection.getImage(collectionIndex);
+                selectedMask = imageCollection.getMask(collectionIndex);
+            }
+            
 
 
             var response = await openai.CreateImageEdit(new CreateImageEditRequest

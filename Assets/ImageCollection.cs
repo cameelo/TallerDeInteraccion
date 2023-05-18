@@ -49,6 +49,11 @@ public class ImageCollection : Singleton
         
     }
 
+    public int getSize()
+    {
+        return images.Length;
+    }
+
     public string[] getImages()
     {
         return images;

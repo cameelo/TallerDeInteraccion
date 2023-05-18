@@ -986,6 +986,7 @@ MonoBehaviour:
   dropdown: {fileID: 478942607}
   headerText: {fileID: 1093184779}
   loadingLabel: {fileID: 741032345}
+  useDropdown: 0
 --- !u!4 &546574818
 Transform:
   m_ObjectHideFlags: 0
