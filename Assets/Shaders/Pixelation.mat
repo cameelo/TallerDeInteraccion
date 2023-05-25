@@ -26,8 +26,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _PixelHeight: 5.6597037
-    - _PixelWidth: 5.6597037
+    - _PixelHeight: 0.9917522
+    - _PixelWidth: 0.9917522
     - _Pixels: 512
     m_Colors: []
   m_BuildTextureStacks: []

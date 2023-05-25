@@ -31,7 +31,7 @@ namespace OpenAI
             imageCollection = GameObject.FindObjectOfType<ImageCollection>();
             yield return new WaitUntil(() => imageCollection.getIsInitialized());
             button.onClick.AddListener(SendImageRequest);
-            headerText.text = "Describe a este patrimonio...";
+            headerText.text = "Describe detalladamente el patrimonio arquitectónico que se ve en esta imagen";
             proceedButton.gameObject.SetActive(false);
             if (!useDropdown)
             {
