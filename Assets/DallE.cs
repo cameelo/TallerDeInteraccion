@@ -16,6 +16,7 @@ namespace OpenAI
         [SerializeField] private InputField inputField;
         [SerializeField] private Button button;
         [SerializeField] private Button proceedButton;
+        [SerializeField] private Canvas loading;
         [SerializeField] private Image image;
         [SerializeField] private TMP_Dropdown dropdown;
         [SerializeField] private TMP_Text headerText;
@@ -28,10 +29,11 @@ namespace OpenAI
 
         private IEnumerator Start()
         {
+            loading.gameObject.SetActive(false);
             imageCollection = GameObject.FindObjectOfType<ImageCollection>();
             yield return new WaitUntil(() => imageCollection.getIsInitialized());
             button.onClick.AddListener(SendImageRequest);
-            headerText.text = "Describe detalladamente el patrimonio arquitectónico que se ve en esta imagen";
+            headerText.text = "Describe detalladamente el patrimonio arquitectï¿½nico que se ve en esta imagen";
             proceedButton.gameObject.SetActive(false);
             if (!useDropdown)
             {
@@ -51,7 +53,7 @@ namespace OpenAI
 
         private async void SendImageRequest()
         {
-            //loadingLabel.SetActive(true);
+            loading.gameObject.SetActive(true);
             button.gameObject.SetActive(false);
             inputField.gameObject.SetActive(false);
             headerText.SetText("Reconstruyendo patrimonio");
@@ -109,6 +111,7 @@ namespace OpenAI
             //button.enabled = true;
             //inputField.enabled = true;
             //loadingLabel.SetActive(false);
+            loading.gameObject.SetActive(false);
             headerText.SetText("Patrimonio reconstruido");
             proceedButton.gameObject.SetActive(true);
         }
